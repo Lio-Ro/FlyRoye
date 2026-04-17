@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fly Roye – Luxus Reisen</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #05070d;
+      color: white;
+    }
+
+    /* NAVBAR */
+    nav {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 40px;
+      z-index: 10;
+    }
+    nav h2 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)),
+        url('https://source.unsplash.com/1600x900/?luxury,travel');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+      margin-bottom: 30px;
+    }
+
+    .hero button {
+      padding: 14px 30px;
+      font-size: 16px;
+      border-radius: 30px;
+      border: none;
+      background: linear-gradient(135deg, #00c3ff, #0077ff);
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .hero button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #00c3ff;
+    }
+
+    /* MAP SECTION */
+    #map-section {
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    #map {
+      height: 70vh;
+      width: 90%;
+      margin: auto;
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(0,195,255,0.2);
+    }
+
+    .popup-img {
+      width: 200px;
+      border-radius: 10px;
+      margin-top: 5px;
+    }
+
+    button.route {
+      margin: 20px;
+      padding: 12px 25px;
+      border-radius: 30px;
+      border: none;
+      background: linear-gradient(135deg, #00c3ff, #0077ff);
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <h2>✈️ Fly Roye</h2>
+    <div>Luxus Travel Agency</div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Erlebe die Welt in Luxus</h1>
+    <p>Eine exklusive Reise rund um den Globus – einzigartig, stilvoll, unvergesslich</p>
+    <button onclick="scrollToMap()">🌍 Reise entdecken</button>
+  </section>
+
+  <!-- MAP -->
+  <section id="map-section">
+    <h2>Meine Weltreise Route</h2>
+    <button class="route" onclick="startRoute()">🚀 Route starten</button>
+    <div id="map"></div>
+  </section>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    function scrollToMap() {
+      document.getElementById('map-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const map = L.map('map').setView([20, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    const cities = [
+      { name: "Zürich", coords: [47.3769, 8.5417], img: "https://source.unsplash.com/200x120/?zurich" },
+      { name: "Stockholm", coords: [59.3293, 18.0686], img: "https://source.unsplash.com/200x120/?stockholm" },
+      { name: "Las Vegas", coords: [36.1699, -115.1398], img: "https://source.unsplash.com/200x120/?lasvegas" },
+      { name: "Mexico City", coords: [19.4326, -99.1332], img: "https://source.unsplash.com/200x120/?mexicocity" },
+      { name: "Guatemala City", coords: [14.6349, -90.5069], img: "https://source.unsplash.com/200x120/?guatemala" },
+      { name: "Antigua", coords: [14.5586, -90.7339], img: "https://source.unsplash.com/200x120/?antigua,guatemala" },
+      { name: "Rio de Janeiro", coords: [-22.9068, -43.1729], img: "https://source.unsplash.com/200x120/?rio" },
+      { name: "Madagaskar", coords: [-18.7669, 46.8691], img: "https://source.unsplash.com/200x120/?madagascar" },
+      { name: "Sydney", coords: [-33.8688, 151.2093], img: "https://source.unsplash.com/200x120/?sydney" },
+      { name: "Bali", coords: [-8.3405, 115.0920], img: "https://source.unsplash.com/200x120/?bali" },
+      { name: "Tokyo", coords: [35.6762, 139.6503], img: "https://source.unsplash.com/200x120/?tokyo" },
+      { name: "Zürich", coords: [47.3769, 8.5417], img: "https://source.unsplash.com/200x120/?zurich" }
+    ];
+
+    cities.forEach(city => {
+      L.circleMarker(city.coords, {
+        radius: 6,
+        color: '#00c3ff',
+        fillColor: '#00c3ff',
+        fillOpacity: 0.8
+      }).addTo(map)
+        .bindPopup(`
+          <b>${city.name}</b><br>
+          <img class="popup-img" src="${city.img}">
+        `);
+    });
+
+    let routeLine;
+
+    function startRoute() {
+      if (routeLine) map.removeLayer(routeLine);
+
+      let latlngs = [];
+      let i = 0;
+
+      const interval = setInterval(() => {
+        latlngs.push(cities[i].coords);
+
+        if (routeLine) map.removeLayer(routeLine);
+
+        routeLine = L.polyline(latlngs, {
+          color: '#00c3ff',
+          weight: 5,
+          opacity: 0.8
+        }).addTo(map);
+
+        map.panTo(cities[i].coords, { animate: true, duration: 1 });
+
+        i++;
+        if (i >= cities.length) clearInterval(interval);
+      }, 900);
+    }
+  </script>
+</body>
+</html>
