@@ -444,6 +444,182 @@
       transform: scale(1.3);
     }
 
+    /* MODAL STYLES */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, rgba(5,7,13,0.95) 0%, rgba(0,119,255,0.15) 100%);
+      border: 2px solid #00c3ff;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 900px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.4s ease-out;
+      box-shadow: 0 20px 60px rgba(0,195,255,0.3);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid rgba(0,195,255,0.3);
+      padding-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      font-size: 2.5rem;
+      color: #00c3ff;
+      margin: 0;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #00c3ff;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .close-btn:hover {
+      color: white;
+      transform: rotate(90deg);
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .modal-section {
+      background: rgba(0,195,255,0.08);
+      border-left: 4px solid #00c3ff;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .modal-section h3 {
+      color: #00c3ff;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .modal-section p {
+      opacity: 0.85;
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+
+    .modal-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .modal-section li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,195,255,0.2);
+      opacity: 0.8;
+    }
+
+    .modal-section li:before {
+      content: "✈️ ";
+      margin-right: 10px;
+    }
+
+    .budget-breakdown {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .budget-item {
+      background: rgba(0,195,255,0.1);
+      border: 1px solid rgba(0,195,255,0.3);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .budget-item .label {
+      opacity: 0.7;
+      font-size: 0.9rem;
+    }
+
+    .budget-item .value {
+      color: #00c3ff;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 5px;
+    }
+
+    .modal-booking {
+      background: rgba(0,195,255,0.1);
+      border: 2px solid #00c3ff;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .modal-booking button {
+      padding: 14px 40px;
+      background: linear-gradient(135deg, #00c3ff, #0077ff);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      transition: 0.3s;
+      margin-top: 15px;
+    }
+
+    .modal-booking button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0,195,255,0.5);
+    }
+
     /* RESPONSIVE */
     @media (max-width: 768px) {
       nav {
@@ -481,6 +657,18 @@
       .contact-info {
         grid-template-columns: 1fr;
       }
+
+      .modal-content {
+        padding: 20px;
+      }
+
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-header h2 {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
@@ -507,7 +695,7 @@
   <!-- MAP SECTION -->
   <section id="map-section">
     <h2>Meine Weltreise Route</h2>
-    <p>Folge der interaktiven Karte und entdecke alle Stationen der Reise</p>
+    <p>Klicke auf die Länder um Details zu Hotels, Flügen und Budget zu sehen</p>
     <button class="route" onclick="startRoute()">🚀 Route starten</button>
     <div id="map"></div>
   </section>
@@ -516,41 +704,45 @@
   <section id="destinations">
     <h2>Reiseziele Highlights</h2>
     <div class="destinations-grid">
-      <div class="destination-card">
+      <div class="destination-card" onclick="openModal('zurich')">
         <h3>🇨🇭 Zürich</h3>
         <p>Das Tor zu den Schweizer Alpen. Luxuriöses Shopping, Feinschmecker-Restaurants und atemberaubende Berglandschaften erwarten Sie.</p>
+        <p style="margin-top: 10px; color: #00c3ff;">👆 Klick für Details</p>
       </div>
-      <div class="destination-card">
+      <div class="destination-card" onclick="openModal('stockholm')">
         <h3>🇸🇪 Stockholm</h3>
         <p>Die "Venedig des Nordens" mit ihrer einzigartigen Architektur, pulsierendem Nachtleben und den Schären des Schärengartens.</p>
+        <p style="margin-top: 10px; color: #00c3ff;">👆 Klick für Details</p>
       </div>
-      <div class="destination-card">
+      <div class="destination-card" onclick="openModal('lasvegas')">
         <h3>🇺🇸 Las Vegas</h3>
         <p>Glitter, Glamour und Unterhaltung pur. Weltklasse-Shows, exklusive Casinos und Gourmet-Dining auf höchstem Niveau.</p>
+        <p style="margin-top: 10px; color: #00c3ff;">👆 Klick für Details</p>
       </div>
-      <div class="destination-card">
+      <div class="destination-card" onclick="openModal('mexicocity')">
         <h3>🇲🇽 Mexico City</h3>
         <p>Eine pulsierende Metropole mit reicher Geschichte, Kunstmuseen, authentischer Küche und vibrantem Kulturleben.</p>
+        <p style="margin-top: 10px; color: #00c3ff;">👆 Klick für Details</p>
       </div>
-      <div class="destination-card">
-        <h3>🇬🇹 Rio de Janeiro</h3>
+      <div class="destination-card" onclick="openModal('riodejaneiro')">
+        <h3>🇧🇷 Rio de Janeiro</h3>
         <p>Die legendäre "Wunderbare Stadt" mit Ipanema Beach, Christus-Statue und unvergesslichen Nächten unter südamerikanischem Himmel.</p>
+        <p style="margin-top: 10px; color: #00c3ff;">👆 Klick für Details</p>
       </div>
-      <div class="destination-card">
+      <div class="destination-card" onclick="openModal('sydney')">
         <h3>🇦🇺 Sydney</h3>
         <p>Ikonische Hafenstadt mit dem berühmten Opernhaus, wunderschönen Stränden und dem ultimativen australischen Lebensstil.</p>
+        <p style="margin-top: 10px; color: #00c3ff;">👆 Klick für Details</p>
       </div>
-      <div class="destination-card">
+      <div class="destination-card" onclick="openModal('bali')">
         <h3>🇮🇩 Bali</h3>
         <p>Das tropische Paradies mit luxuriösen Resorts, alten Tempeln, Reisfeldern und den besten Stränden Südostasiens.</p>
+        <p style="margin-top: 10px; color: #00c3ff;">👆 Klick für Details</p>
       </div>
-      <div class="destination-card">
+      <div class="destination-card" onclick="openModal('tokyo')">
         <h3>🇯🇵 Tokyo</h3>
         <p>Eine futuristische Metropole, die Tradition und Moderne perfekt vereint. Erstklassige Küche, Shopping und kulturelle Schätze.</p>
-      </div>
-      <div class="destination-card">
-        <h3>🇲🇬 Madagaskar</h3>
-        <p>Ein einzigartiges Naturparadies mit seltener Tierwelt, weißen Stränden und abgelegenen Insel-Resorts für echte Abenteurer.</p>
+        <p style="margin-top: 10px; color: #00c3ff;">👆 Klick für Details</p>
       </div>
     </div>
   </section>
@@ -677,8 +869,279 @@
     </div>
   </footer>
 
+  <!-- MODAL -->
+  <div id="destinationModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Destination</h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section">
+          <h3>🏨 Hotels & Unterkünfte</h3>
+          <ul id="hotelsList"></ul>
+        </div>
+        <div class="modal-section">
+          <h3>✈️ Flugverbindungen</h3>
+          <ul id="flightsList"></ul>
+        </div>
+        <div class="modal-section">
+          <h3>📅 Eckdaten</h3>
+          <p id="duration"></p>
+          <p id="bestTime"></p>
+          <p id="activities"></p>
+        </div>
+        <div class="modal-section">
+          <h3>💰 Budget Übersicht</h3>
+          <div class="budget-breakdown" id="budgetList"></div>
+        </div>
+      </div>
+      <div class="modal-booking">
+        <h3>Interessiert? Buche jetzt!</h3>
+        <button onclick="alert('Buchungsformular wird geladen...')">🎫 Jetzt Buchen</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
+    // Destination Data
+    const destinationData = {
+      zurich: {
+        title: "🇨🇭 Zürich, Schweiz",
+        hotels: [
+          "Baur au Lac (5⭐) - CHF 850/Nacht",
+          "The Dolder Grand (5⭐) - CHF 750/Nacht",
+          "Hotel Savoy Zürich (5⭐) - CHF 680/Nacht",
+          "Mandarin Oriental (5⭐) - CHF 920/Nacht"
+        ],
+        flights: [
+          "Lufthansa (LH) - Zürich - Business Class",
+          "Swiss International Air (LX) - Premium Economy",
+          "Air France (AF) - First Class",
+          "British Airways (BA) - Club World"
+        ],
+        duration: "Empfohlene Aufenthaltstdauer: 4-5 Tage",
+        bestTime: "Beste Reisezeit: Juni - September",
+        activities: "Aktivitäten: Shopping, Museen, Bergwanderungen, Bootsfahrten",
+        budget: {
+          hotel: "$4,250",
+          flights: "$3,200",
+          activities: "$1,800",
+          dining: "$2,100",
+          total: "$11,350"
+        }
+      },
+      stockholm: {
+        title: "🇸🇪 Stockholm, Schweden",
+        hotels: [
+          "Grand Hotel Stockholm (5⭐) - SEK 2,800/Nacht",
+          "Diplomat Hotel (5⭐) - SEK 2,400/Nacht",
+          "Hotel Skeppsholmen (4⭐) - SEK 1,900/Nacht",
+          "At Six (5⭐) - SEK 2,600/Nacht"
+        ],
+        flights: [
+          "SAS (SK) - Stockholm - First Class",
+          "Lufthansa (LH) - Stockholm - Business Class",
+          "Air France (AF) - Premium Economy",
+          "KLM (KL) - Business Class"
+        ],
+        duration: "Empfohlene Aufenthaltstdauer: 3-4 Tage",
+        bestTime: "Beste Reisezeit: Mai - August",
+        activities: "Aktivitäten: Schären-Touren, Museumsbesuche, Nachtleben, Spa",
+        budget: {
+          hotel: "$3,100",
+          flights: "$3,800",
+          activities: "$1,600",
+          dining: "$1,950",
+          total: "$10,450"
+        }
+      },
+      lasvegas: {
+        title: "🇺🇸 Las Vegas, USA",
+        hotels: [
+          "The Bellagio (5⭐) - $450/Nacht",
+          "The Venetian (5⭐) - $500/Nacht",
+          "Caesars Palace (5⭐) - $400/Nacht",
+          "Wynn Las Vegas (5⭐) - $550/Nacht"
+        ],
+        flights: [
+          "United Airlines (UA) - First Class",
+          "American Airlines (AA) - Business Class",
+          "Delta Air Lines (DL) - First Class",
+          "Virgin Atlantic (VS) - Upper Class"
+        ],
+        duration: "Empfohlene Aufenthaltstdauer: 3-4 Tage",
+        bestTime: "Beste Reisezeit: Oktober - April",
+        activities: "Aktivitäten: Shows, Casinos, Golf, Helikopter-Touren",
+        budget: {
+          hotel: "$2,750",
+          flights: "$2,400",
+          activities: "$2,500",
+          dining: "$1,800",
+          total: "$9,450"
+        }
+      },
+      mexicocity: {
+        title: "🇲🇽 Mexico City, Mexiko",
+        hotels: [
+          "Four Seasons Mexico City (5⭐) - $600/Nacht",
+          "Rosewood Mexico City (5⭐) - $550/Nacht",
+          "St. Regis Mexico City (5⭐) - $650/Nacht",
+          "Casa de Campo Resort (5⭐) - $480/Nacht"
+        ],
+        flights: [
+          "Aeromexico (AM) - First Class",
+          "Lufthansa (LH) - Business Class",
+          "American Airlines (AA) - First Class",
+          "Delta Air Lines (DL) - Business Class"
+        ],
+        duration: "Empfohlene Aufenthaltstdauer: 4-5 Tage",
+        bestTime: "Beste Reisezeit: Oktober - April",
+        activities: "Aktivitäten: Museen, Archäologie, Kulinarische Tour, Märkte",
+        budget: {
+          hotel: "$3,000",
+          flights: "$2,100",
+          activities: "$1,400",
+          dining: "$1,600",
+          total: "$8,100"
+        }
+      },
+      riodejaneiro: {
+        title: "🇧🇷 Rio de Janeiro, Brasilien",
+        hotels: [
+          "Copacabana Palace (5⭐) - R$ 3,500/Nacht",
+          "Belmond Copacabana Palace (5⭐) - R$ 3,800/Nacht",
+          "Fasano Rio de Janeiro (5⭐) - R$ 3,200/Nacht",
+          "Sheraton Grand Rio (5⭐) - R$ 2,800/Nacht"
+        ],
+        flights: [
+          "TAP Air Portugal (TP) - First Class",
+          "Lufthansa (LH) - Business Class",
+          "LATAM Airlines (LA) - First Class",
+          "Air France (AF) - First Class"
+        ],
+        duration: "Empfohlene Aufenthaltstdauer: 5-6 Tage",
+        bestTime: "Beste Reisezeit: Dezember - März",
+        activities: "Aktivitäten: Strände, Christus-Statue, Zuckerhut, Nachtleben",
+        budget: {
+          hotel: "$3,750",
+          flights: "$3,500",
+          activities: "$2,200",
+          dining: "$2,100",
+          total: "$11,550"
+        }
+      },
+      sydney: {
+        title: "🇦🇺 Sydney, Australien",
+        hotels: [
+          "Park Hyatt Sydney (5⭐) - AUD 800/Nacht",
+          "Shangri-La Sydney (5⭐) - AUD 750/Nacht",
+          "Four Seasons Sydney (5⭐) - AUD 900/Nacht",
+          "Sofitel Sydney Darling Harbour (5⭐) - AUD 650/Nacht"
+        ],
+        flights: [
+          "Qantas Airways (QF) - First Class",
+          "Singapore Airlines (SQ) - First Class",
+          "Emirates (EK) - First Class",
+          "Lufthansa (LH) - First Class"
+        ],
+        duration: "Empfohlene Aufenthaltstdauer: 5-6 Tage",
+        bestTime: "Beste Reisezeit: September - November",
+        activities: "Aktivitäten: Oper, Strände, Wanderungen, Blue Mountains",
+        budget: {
+          hotel: "$4,500",
+          flights: "$4,200",
+          activities: "$2,100",
+          dining: "$2,300",
+          total: "$13,100"
+        }
+      },
+      bali: {
+        title: "🇮🇩 Bali, Indonesien",
+        hotels: [
+          "Banyan Tree Bali (5⭐) - IDR 5.5M/Nacht",
+          "Aston Bali Resort & Spa (5⭐) - IDR 3.2M/Nacht",
+          "St. Regis Bali (5⭐) - IDR 6M/Nacht",
+          "Ritz-Carlton Bali (5⭐) - IDR 5M/Nacht"
+        ],
+        flights: [
+          "Singapore Airlines (SQ) - First Class",
+          "Garuda Indonesia (GA) - First Class",
+          "Emirates (EK) - First Class",
+          "Cathay Pacific (CX) - First Class"
+        ],
+        duration: "Empfohlene Aufenthaltstdauer: 6-7 Tage",
+        bestTime: "Beste Reisezeit: April - Oktober",
+        activities: "Aktivitäten: Strände, Tempel, Yoga, Spa, Reisfelder",
+        budget: {
+          hotel: "$3,200",
+          flights: "$2,800",
+          activities: "$1,500",
+          dining: "$1,200",
+          total: "$8,700"
+        }
+      },
+      tokyo: {
+        title: "🇯🇵 Tokyo, Japan",
+        hotels: [
+          "Hotel New Otani Tokyo (5⭐) - ¥150,000/Nacht",
+          "The Peninsula Tokyo (5⭐) - ¥180,000/Nacht",
+          "Mandarin Oriental Tokyo (5⭐) - ¥200,000/Nacht",
+          "Hyatt Centric Ginza Tokyo (5⭐) - ¥120,000/Nacht"
+        ],
+        flights: [
+          "All Nippon Airways (NH) - First Class",
+          "Japan Airlines (JL) - First Class",
+          "Lufthansa (LH) - Business Class",
+          "Singapore Airlines (SQ) - First Class"
+        ],
+        duration: "Empfohlene Aufenthaltstdauer: 4-5 Tage",
+        bestTime: "Beste Reisezeit: März - Mai & September - November",
+        activities: "Aktivitäten: Tempel, Shopping, Restaurants, Kultur",
+        budget: {
+          hotel: "$3,600",
+          flights: "$3,500",
+          activities: "$1,800",
+          dining: "$2,100",
+          total: "$11,000"
+        }
+      }
+    };
+
+    function openModal(destination) {
+      const data = destinationData[destination];
+      if (!data) return;
+
+      document.getElementById('modalTitle').textContent = data.title;
+      document.getElementById('hotelsList').innerHTML = data.hotels.map(h => `<li>${h}</li>`).join('');
+      document.getElementById('flightsList').innerHTML = data.flights.map(f => `<li>${f}</li>`).join('');
+      document.getElementById('duration').textContent = data.duration;
+      document.getElementById('bestTime').textContent = data.bestTime;
+      document.getElementById('activities').textContent = data.activities;
+
+      const budgetHTML = Object.entries(data.budget).map(([key, value]) => `
+        <div class="budget-item">
+          <div class="label">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
+          <div class="value">${value}</div>
+        </div>
+      `).join('');
+      document.getElementById('budgetList').innerHTML = budgetHTML;
+
+      document.getElementById('destinationModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('destinationModal').classList.remove('active');
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('destinationModal');
+      if (event.target === modal) {
+        modal.classList.remove('active');
+      }
+    }
+
     function scrollToMap() {
       document.getElementById('map-section').scrollIntoView({ behavior: 'smooth' });
     }
@@ -697,32 +1160,37 @@
     }).addTo(map);
 
     const cities = [
-      { name: "Zürich", coords: [47.3769, 8.5417], img: "https://source.unsplash.com/200x120/?zurich" },
-      { name: "Stockholm", coords: [59.3293, 18.0686], img: "https://source.unsplash.com/200x120/?stockholm" },
-      { name: "Las Vegas", coords: [36.1699, -115.1398], img: "https://source.unsplash.com/200x120/?lasvegas" },
-      { name: "Mexico City", coords: [19.4326, -99.1332], img: "https://source.unsplash.com/200x120/?mexicocity" },
-      { name: "Guatemala City", coords: [14.6349, -90.5069], img: "https://source.unsplash.com/200x120/?guatemala" },
-      { name: "Antigua", coords: [14.5586, -90.7339], img: "https://source.unsplash.com/200x120/?antigua,guatemala" },
-      { name: "Rio de Janeiro", coords: [-22.9068, -43.1729], img: "https://source.unsplash.com/200x120/?rio" },
-      { name: "Madagaskar", coords: [-18.7669, 46.8691], img: "https://source.unsplash.com/200x120/?madagascar" },
-      { name: "Sydney", coords: [-33.8688, 151.2093], img: "https://source.unsplash.com/200x120/?sydney" },
-      { name: "Bali", coords: [-8.3405, 115.0920], img: "https://source.unsplash.com/200x120/?bali" },
-      { name: "Tokyo", coords: [35.6762, 139.6503], img: "https://source.unsplash.com/200x120/?tokyo" },
-      { name: "Zürich", coords: [47.3769, 8.5417], img: "https://source.unsplash.com/200x120/?zurich" }
+      { name: "Zürich", coords: [47.3769, 8.5417], id: "zurich", img: "https://source.unsplash.com/200x120/?zurich" },
+      { name: "Stockholm", coords: [59.3293, 18.0686], id: "stockholm", img: "https://source.unsplash.com/200x120/?stockholm" },
+      { name: "Las Vegas", coords: [36.1699, -115.1398], id: "lasvegas", img: "https://source.unsplash.com/200x120/?lasvegas" },
+      { name: "Mexico City", coords: [19.4326, -99.1332], id: "mexicocity", img: "https://source.unsplash.com/200x120/?mexicocity" },
+      { name: "Guatemala City", coords: [14.6349, -90.5069], id: "guatemala", img: "https://source.unsplash.com/200x120/?guatemala" },
+      { name: "Antigua", coords: [14.5586, -90.7339], id: "antigua", img: "https://source.unsplash.com/200x120/?antigua,guatemala" },
+      { name: "Rio de Janeiro", coords: [-22.9068, -43.1729], id: "riodejaneiro", img: "https://source.unsplash.com/200x120/?rio" },
+      { name: "Madagaskar", coords: [-18.7669, 46.8691], id: "madagascar", img: "https://source.unsplash.com/200x120/?madagascar" },
+      { name: "Sydney", coords: [-33.8688, 151.2093], id: "sydney", img: "https://source.unsplash.com/200x120/?sydney" },
+      { name: "Bali", coords: [-8.3405, 115.0920], id: "bali", img: "https://source.unsplash.com/200x120/?bali" },
+      { name: "Tokyo", coords: [35.6762, 139.6503], id: "tokyo", img: "https://source.unsplash.com/200x120/?tokyo" },
+      { name: "Zürich", coords: [47.3769, 8.5417], id: "zurich", img: "https://source.unsplash.com/200x120/?zurich" }
     ];
 
     cities.forEach(city => {
-      L.circleMarker(city.coords, {
+      const marker = L.circleMarker(city.coords, {
         radius: 8,
         color: '#00c3ff',
         fillColor: '#00c3ff',
         fillOpacity: 0.8,
         weight: 3
-      }).addTo(map)
-        .bindPopup(`
-          <b style="color: #00c3ff;">${city.name}</b><br>
-          <img class="popup-img" src="${city.img}">
-        `);
+      }).addTo(map);
+
+      marker.bindPopup(`
+        <div style="text-align: center;">
+          <b style="color: #00c3ff; font-size: 1.1rem;">${city.name}</b><br>
+          <img class="popup-img" src="${city.img}" style="width: 150px; border-radius: 8px; margin: 8px 0;">
+          <br>
+          <button onclick="openModal('${city.id}')" style="background: #00c3ff; color: #05070d; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold;">Details anschauen</button>
+        </div>
+      `);
     });
 
     let routeLine;
