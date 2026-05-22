@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fly Roye – Private Aviation & Luxury Travel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #060709; color: #f1f3f5; overflow-x: hidden; scroll-behavior: smooth; }
+    nav { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; z-index: 1000; background: rgba(6, 7, 9, 0.85); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(212, 175, 55, 0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
+    .brand-title { font-weight: 300; font-size: 1.5rem; letter-spacing: 6px; text-transform: uppercase; color: #e5cf92; text-shadow: 0 0 15px rgba(229, 207, 146, 0.2); }
+    nav div a { color: rgba(241, 243, 245, 0.6); text-decoration: none; font-weight: 500; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-left: 25px; transition: color 0.3s; }
+    nav div a:hover { color: #e5cf92; }
+    .hero { height: 100vh; background: linear-gradient(rgba(6, 7, 9, 0.3), #060709), url('https://unsplash.com') center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+    .hero h1 { font-size: 4rem; font-weight: 200; margin-bottom: 20px; letter-spacing: 10px; text-transform: uppercase; background: linear-gradient(135deg, #ffffff 0%, #e5cf92 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 1.2rem; font-weight: 300; max-width: 700px; margin-bottom: 40px; color: rgba(241, 243, 245, 0.7); }
+    .hero button { padding: 16px 45px; font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; border: 1px solid #e5cf92; background: transparent; color: #e5cf92; cursor: pointer; transition: 0.4s; }
+    .hero button:hover { background: #e5cf92; color: #060709; box-shadow: 0 0 30px rgba(229, 207, 146, 0.4); transform: translateY(-2px); }
+    section { padding: 100px 40px; text-align: center; }
+    section h2 { font-size: 2.2rem; font-weight: 300; margin-bottom: 10px; color: #ffffff; text-transform: uppercase; letter-spacing: 4px; }
+    .section-subtitle { font-size: 1rem; color: rgba(241, 243, 245, 0.4); margin-bottom: 50px; letter-spacing: 1px; text-transform: uppercase; }
+    .map-container { width: 100%; max-width: 1200px; margin: auto; border: 1px solid rgba(229, 207, 146, 0.15); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); overflow: hidden; }
+    iframe { width: 100%; height: 55vh; border: none; display: block; filter: grayscale(1) invert(0.9) hue-rotate(180deg); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+    .card { background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(229, 207, 146, 0.1); padding: 35px 30px; text-align: left; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; }
+    .card:hover { border-color: #e5cf92; background: rgba(229, 207, 146, 0.02); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); transform: translateY(-4px); }
+    .card h3 { color: #ffffff; margin-bottom: 12px; font-size: 1.2rem; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; border-left: 2px solid #e5cf92; padding-left: 12px; }
+    .card:hover h3 { color: #e5cf92; }
+    .card p { color: rgba(241, 243, 245, 0.55); line-height: 1.6; font-size: 0.95rem; font-weight: 300; margin-bottom: 15px; }
+    .click-details { font-size: 0.75rem; color: #e5cf92; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; opacity: 0.6; }
+    .card:hover .click-details { opacity: 1; }
+    .card.featured { border: 1px solid #e5cf92; background: rgba(229, 207, 146, 0.02); }
+    .package-price { font-size: 2.5rem; color: #e5cf92; font-weight: 300; margin: 15px 0 5px 0; }
+    .package-duration { color: rgba(241, 243, 245, 0.35); margin-bottom: 25px; font-size: 0.8rem; text-transform: uppercase; font-weight: 600; }
+    .package-features { text-align: left; margin: 25px 0; border-top: 1px solid rgba(229, 207, 146, 0.1); }
+    .package-features li { list-style: none; padding: 10px 0; border-bottom: 1px solid rgba(241, 243, 245, 0.03); font-size: 0.9rem; color: rgba(241, 243, 245, 0.7); padding-left: 15px; position: relative; }
+    .package-features li:before { content: "—"; position: absolute; left: 0; color: #e5cf92; }
+    .package-card button { padding: 14px; background: transparent; color: #ffffff; border: 1px solid rgba(229, 207, 146, 0.3); cursor: pointer; width: 100%; font-weight: 500; text-transform: uppercase; font-size: 12px; letter-spacing: 2px; transition: 0.3s; }
+    .package-card button:hover { background: #e5cf92; color: #060709; border-color: #e5cf92; }
+    #contact { background: #0b0d12; }
+    .contact-container { max-width: 600px; margin: 0 auto; }
+    .contact-info { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 35px; }
+    .contact-item h4 { color: #e5cf92; margin-bottom: 6px; font-size: 0.95rem; text-transform: uppercase; font-weight: 500; letter-spacing: 2px; }
+    input, textarea { width: 100%; padding: 15px; margin-bottom: 15px; background: rgba(6, 7, 9, 0.5); border: 1px solid rgba(229, 207, 146, 0.15); color: #ffffff; font-family: inherit; font-size: 15px; }
+    input:focus, textarea:focus { outline: none; border-color: #e5cf92; box-shadow: 0 0 15px rgba(229, 207, 146, 0.1); }
+    form button { width: 100%; padding: 18px; border: none; background: #e5cf92; color: #060709; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.4s; }
+    form button:hover { background: #ffffff; box-shadow: 0 0 30px rgba(255, 255, 255, 0.4); }
+    footer { padding: 40px; text-align: center; font-size: 0.8rem; color: rgba(241, 243, 245, 0.3); border-top: 1px solid rgba(212, 175, 55, 0.05); background: #060709; }
+    @media (max-width: 768px) { nav { padding: 15px 30px; } nav div { display: none; } .hero h1 { font-size: 2.6rem; } .contact-info { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="brand-title">Fly Roye</div>
+    <div>
+      <a href="#map-section">Flugplan</a>
+      <a href="#destinations">Highlights</a>
+      <a href="#experiences">Erlebnisse</a>
+      <a href="#packages">Pakete</a>
+      <a href="#contact">Charter</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1>Erlebe die Welt in Luxus</h1>
+    <p>Eine exklusive Reise rund um den Globus – einzigartig, stilvoll, unvergesslich. Erstelle deine unvergleichliche Weltreise mit uns.</p>
+    <button onclick="document.getElementById('map-section').scrollIntoView();">Reise entdecken</button>
+  </header>
+
+  <section id="map-section">
+    <h2>Meine Weltreise Route</h2>
+    <div class="section-subtitle">Flugrouten-Analyse und geplante Destinationen</div>
+    <div class="map-container">
+      <iframe src="https://google.com"></iframe>
+    </div>
+  </section>
+
+  <section id="destinations">
+    <h2>Reiseziele Highlights</h2>
+    <div class="section-subtitle">Kuratierte Weltklasse-Metropolen auf Ihrer Flugroute</div>
+    <div class="grid">
+      <div class="card" onclick="alert('Flugdaten Zürich: VIP-Hangar-Abwicklung aktiv.');">
+        <h3>Zürich</h3>
+        <p>Das Tor zu den Schweizer Alpen. Luxuriöses Shopping, Feinschmecker-Restaurants und atemberaubende Berglandschaften erwarten Sie.</p>
+        <span class="click-details">Details anzeigen</span>
+      </div>
+      <div class="card" onclick="alert('Flugdaten Stockholm: Bevorzugter Slot auf Startbahn 19R.');">
+        <h3>Stockholm</h3>
+        <p>Das "Venedig des Nordens" mit ihrer einzigartigen Architektur, pulsierendem Nachtleben und den Schären des Schärengartens.</p>
+        <span class="click-details">Details anzeigen</span>
+      </div>
+      <div class="card" onclick="alert('Flugdaten Las Vegas: Privater Helikopter-Zubringer.');">
+        <h3>Las Vegas</h3>
+        <p>Glitter, Glamour und Unterhaltung pur. Weltklasse-Shows, exklusive Casinos und Gourmet-Dining auf höchstem Niveau.</p>
+        <span class="click-details">Details anzeigen</span>
+      </div>
+      <div class="card" onclick="alert('Flugdaten Mexico City: FBO-Lounge-Handling gewährleistet.');">
+        <h3>Mexico City</h3>
+        <p>Eine pulsierende Metropole mit reicher Geschichte, Kunstmuseen, authentischer Küche und vibrantem Kulturleben.</p>
+        <span class="click-details">Details anzeigen</span>
+      </div>
+      <div class="card" onclick="alert('Flugdaten Rio: Direktflug-Zulassung über Galeão Executive.');">
+        <h3>Rio de Janeiro</h3>
+        <p>Die legendäre "Wunderbare Stadt" mit Ipanema Beach, Christus-Statue und unvergesslichen Nächten unter südamerikanischem Himmel.</p>
+        <span class="click-details">Details anzeigen</span>
+      </div>
+      <div class="card" onclick="alert('Flugdaten Sydney: Executive Suite in Kingsford Smith Lounge.');">
+        <h3>Sydney</h3>
+        <p>Ikonische Hafenstadt mit dem berühmten Opernhaus, wunderschönen Stränden und dem ultimativen australischen Lebensstil.</p>
+        <span class="click-details">Details anzeigen</span>
+      </div>
+      <div class="card" onclick="alert('Flugdaten Bali: Limousinen-Transfer direkt zum Resort.');">
+        <h3>Bali</h3>
+        <p>Das tropische Paradies mit luxuriösen Resorts, alten Tempeln, Reisfeldern und den besten Stränden Südostasiens.</p>
+        <span class="click-details">Details anzeigen</span>
+      </div>
+      <div class="card" onclick="alert('Flugdaten Tokyo: Fast-Track-Zollkontrolle für Privatflüge.');">
+        <h3>Tokyo</h3>
