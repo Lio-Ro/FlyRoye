@@ -509,6 +509,281 @@ window.addEventListener("load", () => {
 
 });
 
+# Fly Roye — Lando Norris Style Cursor & Premium Effects
+
+Füge diese Erweiterungen zu deiner bestehenden Webseite hinzu, damit sie den modernen, dynamischen Maus-Effekt bekommt wie auf hochwertigen Motorsport-/Lifestyle-Webseiten.
+
+---
+
+# 1. HTML
+
+Füge DIREKT nach dem öffnenden `<body>` Tag das hier ein:
+
+```html
+<div class="custom-cursor"></div>
+<div class="cursor-ring"></div>
+```
+
+---
+
+# 2. CSS
+
+Füge diesen Code GANZ UNTEN in dein `<style>` ein.
+
+```css
+/* ==========================================
+   LANDO NORRIS STYLE CURSOR
+========================================== */
+
+body{
+  cursor:none;
+}
+
+.custom-cursor{
+  position:fixed;
+  width:14px;
+  height:14px;
+  background:#e5cf92;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:999999;
+  transform:translate(-50%, -50%);
+  transition:
+  transform 0.08s linear,
+  width 0.25s ease,
+  height 0.25s ease,
+  background 0.25s ease,
+  opacity 0.25s ease;
+
+  box-shadow:
+  0 0 20px rgba(229,207,146,0.7),
+  0 0 60px rgba(229,207,146,0.35);
+}
+
+.cursor-ring{
+  position:fixed;
+  width:42px;
+  height:42px;
+  border:1px solid rgba(229,207,146,0.5);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:999998;
+  transform:translate(-50%, -50%);
+  transition:
+  transform 0.15s ease-out,
+  width 0.3s ease,
+  height 0.3s ease,
+  border 0.3s ease,
+  background 0.3s ease;
+
+  backdrop-filter:blur(3px);
+}
+
+
+/* ==========================================
+   CURSOR HOVER STATES
+========================================== */
+
+.cursor-hover .custom-cursor{
+  width:24px;
+  height:24px;
+  background:white;
+}
+
+.cursor-hover .cursor-ring{
+  width:70px;
+  height:70px;
+  border:1px solid rgba(229,207,146,0.9);
+  background:rgba(229,207,146,0.08);
+  box-shadow:0 0 40px rgba(229,207,146,0.25);
+}
+
+
+/* ==========================================
+   MAGNETIC BUTTON EFFECT
+========================================== */
+
+.luxury-btn,
+.nav-links a,
+.luxury-card,
+.package-card{
+  transition:
+  transform 0.25s ease,
+  box-shadow 0.25s ease,
+  border-color 0.25s ease;
+}
+
+
+/* ==========================================
+   PREMIUM NOISE OVERLAY
+========================================== */
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity:0.025;
+  pointer-events:none;
+  z-index:999;
+}
+
+
+/* ==========================================
+   CINEMATIC HOVER GLOW
+========================================== */
+
+.luxury-card::after,
+.package-card::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:inherit;
+  background:
+  radial-gradient(
+    500px circle at var(--mouse-x) var(--mouse-y),
+    rgba(229,207,146,0.18),
+    transparent 35%
+  );
+
+  opacity:0;
+  transition:opacity 0.35s ease;
+  pointer-events:none;
+}
+
+.luxury-card:hover::after,
+.package-card:hover::after{
+  opacity:1;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:768px){
+
+  body{
+    cursor:auto;
+  }
+
+  .custom-cursor,
+  .cursor-ring{
+    display:none;
+  }
+
+}
+
+
+// ==========================================
+// LANDO NORRIS STYLE CURSOR
+// ==========================================
+
+const cursor = document.querySelector(".custom-cursor");
+const ring = document.querySelector(".cursor-ring");
+
+let mouseX = 0;
+let mouseY = 0;
+
+let ringX = 0;
+let ringY = 0;
+
+
+window.addEventListener("mousemove", (e) => {
+
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+
+  cursor.style.left = `${mouseX}px`;
+  cursor.style.top = `${mouseY}px`;
+
+});
+
+
+function animateRing(){
+
+  ringX += (mouseX - ringX) * 0.18;
+  ringY += (mouseY - ringY) * 0.18;
+
+  ring.style.left = `${ringX}px`;
+  ring.style.top = `${ringY}px`;
+
+  requestAnimationFrame(animateRing);
+
+}
+
+animateRing();
+
+
+// ==========================================
+// CURSOR HOVER STATES
+// ==========================================
+
+const hoverTargets = document.querySelectorAll(
+  ".luxury-btn, .nav-links a, .luxury-card, .package-card"
+);
+
+hoverTargets.forEach((target) => {
+
+  target.addEventListener("mouseenter", () => {
+
+    document.body.classList.add("cursor-hover");
+
+  });
+
+  target.addEventListener("mouseleave", () => {
+
+    document.body.classList.remove("cursor-hover");
+
+  });
+
+});
+
+
+// ==========================================
+// MAGNETIC BUTTON EFFECT
+// ==========================================
+
+const magneticItems = document.querySelectorAll(
+  ".luxury-btn, .package-card"
+);
+
+magneticItems.forEach((item) => {
+
+  item.addEventListener("mousemove", (e) => {
+
+    const rect = item.getBoundingClientRect();
+
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    item.style.transform = `translate(${x * 0.12}px, ${y * 0.12}px)`;
+
+  });
+
+  item.addEventListener("mouseleave", () => {
+
+    item.style.transform = "translate(0px, 0px)";
+
+  });
+
+});
+
+
+// ==========================================
+// SMOOTH PARALLAX BACKGROUND
+// ==========================================
+
+window.addEventListener("scroll", () => {
+
+  const scrollY = window.scrollY;
+
+  document.querySelector(".hero").style.backgroundPositionY = `${scrollY * 0.5}px`;
+
+});
+```
+
+
 
 
 // ==========================================
