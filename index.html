@@ -1,430 +1,905 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fly Roye – Private Aviation & Luxury Travel</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fly Roye — Luxury Travel Agency</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+
+    :root{
+      --bg:#060606;
+      --bg-secondary:#0e0e0e;
+      --card:#121212;
+      --border:rgba(229,207,146,0.12);
+      --gold:#e5cf92;
+      --gold-soft:rgba(229,207,146,0.18);
+      --text:#f5f5f5;
+      --text-muted:#a7a7a7;
+
+      --mouse-x:50%;
+      --mouse-y:50%;
     }
 
-    body {
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-      background: #050608;
-      color: #f1f3f5;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      scroll-behavior:smooth;
     }
 
-    /* BARRIEREFREIER UND INTERAKTIVER NAV-BEREICH */
-    nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 25px 50px;
-      z-index: 1000;
-      background: rgba(5, 6, 8, 0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(229, 207, 146, 0.15);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+    body{
+      font-family:'Manrope', sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+      line-height:1.7;
     }
 
-    .brand-title {
-      font-weight: 300;
-      font-size: 1.6rem;
-      letter-spacing: 8px;
-      text-transform: uppercase;
-      color: #e5cf92;
-      text-shadow: 0 0 15px rgba(229, 207, 146, 0.15);
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+      radial-gradient(circle at top left, rgba(229,207,146,0.08), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(229,207,146,0.05), transparent 35%);
+      pointer-events:none;
+      z-index:-2;
     }
 
-    nav div {
-      display: flex;
-      gap: 35px;
+    a{
+      text-decoration:none;
+      color:inherit;
     }
 
-    nav a {
-      color: rgba(241, 243, 245, 0.6);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      position: relative;
-      transition: color 0.4s ease;
+    img{
+      max-width:100%;
+      display:block;
     }
 
-    nav a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: #e5cf92;
-      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    .container{
+      width:min(1400px, 92%);
+      margin:auto;
     }
 
-    nav a:hover {
-      color: #e5cf92;
+    section{
+      padding:120px 0;
+      position:relative;
     }
 
-    nav a:hover::after {
-      width: 100%;
+    .section-title{
+      font-size:3rem;
+      font-weight:800;
+      margin-bottom:18px;
+      letter-spacing:-1px;
     }
 
-    /* HERO WILLKOMMENSANZEIGE */
-    .hero {
-      height: 100vh;
-      background: linear-gradient(rgba(5, 6, 8, 0.3), #050608), 
-        url('https://unsplash.com') center/cover;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0 20px;
+    .section-subtitle{
+      max-width:700px;
+      color:var(--text-muted);
+      margin-bottom:60px;
+      font-size:1.05rem;
     }
 
-    .hero h1 {
-      font-size: 4.5rem;
-      font-weight: 200;
-      margin-bottom: 20px;
-      letter-spacing: 12px;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #ffffff 0%, #e5cf92 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    /* NAVBAR */
+
+    .navbar{
+      position:fixed;
+      top:0;
+      width:100%;
+      z-index:1000;
+      backdrop-filter:blur(18px);
+      background:rgba(5,5,5,0.75);
+      border-bottom:1px solid rgba(255,255,255,0.05);
     }
 
-    .hero p {
-      font-size: 1.25rem;
-      font-weight: 300;
-      max-width: 750px;
-      margin-bottom: 45px;
-      color: rgba(241, 243, 245, 0.7);
-      letter-spacing: 1px;
-      line-height: 1.8;
+    .nav-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:24px 0;
     }
 
-    .hero button {
-      padding: 18px 50px;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      border: 1px solid #e5cf92;
-      background: transparent;
-      color: #e5cf92;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-      transition: all 0.4s ease;
+    .logo{
+      font-size:1.4rem;
+      font-weight:800;
+      letter-spacing:2px;
+      color:var(--gold);
     }
 
-    .hero button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(229, 207, 146, 0.2), transparent);
-      transition: all 0.6s ease;
-      z-index: -1;
+    .nav-links{
+      display:flex;
+      gap:34px;
     }
 
-    .hero button:hover::before {
-      left: 100%;
+    .nav-links a{
+      color:#d7d7d7;
+      font-size:0.95rem;
+      position:relative;
+      transition:0.4s ease;
     }
 
-    .hero button:hover {
-      background: rgba(229, 207, 146, 0.05);
-      box-shadow: 0 0 30px rgba(229, 207, 146, 0.3);
-      transform: translateY(-2px);
+    .nav-links a:hover{
+      color:var(--gold);
     }
 
-    /* SECTIONS */
-    section {
-      padding: 120px 40px;
-      text-align: center;
+    .nav-links a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-8px;
+      width:0%;
+      height:1px;
+      background:var(--gold);
+      transition:0.4s ease;
     }
 
-    section h2 {
-      font-size: 2.4rem;
-      font-weight: 300;
-      margin-bottom: 15px;
-      color: #ffffff;
-      text-transform: uppercase;
-      letter-spacing: 6px;
+    .nav-links a:hover::after{
+      width:100%;
     }
 
-    .section-subtitle {
-      font-size: 1.05rem;
-      color: rgba(241, 243, 245, 0.4);
-      margin-bottom: 60px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+    /* HERO */
+
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      position:relative;
+      overflow:hidden;
     }
 
-    /* DIGITAL SAT MAP DISPLAY */
-    #map-section {
-      background: #090b0e;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.05);
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+      linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.85)),
+      url("https://images.unsplash.com/photo-1502920917128-1aa500764ce7?q=80&w=2070&auto=format&fit=crop") center/cover;
+      filter:brightness(0.45);
+      z-index:-1;
+      transform:scale(1.05);
     }
 
-    .map-container {
-      width: 100%;
-      max-width: 1200px;
-      margin: auto;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
-      border: 1px solid rgba(229, 207, 146, 0.15);
-      overflow: hidden;
-      transform: perspective(1000px) rotateX(2deg);
-      transition: transform 0.5s ease;
+    .hero-content{
+      max-width:850px;
     }
 
-    .map-container:hover {
-      transform: perspective(1000px) rotateX(0deg);
+    .hero-tag{
+      display:inline-block;
+      color:var(--gold);
+      border:1px solid var(--border);
+      padding:10px 18px;
+      border-radius:999px;
+      margin-bottom:28px;
+      background:rgba(255,255,255,0.03);
+      font-size:0.9rem;
+      letter-spacing:1px;
     }
 
-    iframe {
-      width: 100%;
-      height: 60vh;
-      border: none;
-      display: block;
-      filter: grayscale(1) invert(0.92) hue-rotate(180deg) brightness(0.95);
+    .hero h1{
+      font-size:6rem;
+      line-height:1;
+      margin-bottom:28px;
+      letter-spacing:-4px;
+      font-weight:800;
     }
 
-    /* RASTER UND HOVER-EFFEKTE */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 35px;
-      max-width: 1200px;
-      margin: 0 auto;
+    .hero p{
+      max-width:700px;
+      color:#d2d2d2;
+      font-size:1.15rem;
+      margin-bottom:42px;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.01);
-      border: 1px solid rgba(229, 207, 146, 0.08);
-      padding: 45px 35px;
-      text-align: left;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+    /* BUTTON */
+
+    .luxury-btn{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:18px 38px;
+      background:transparent;
+      border:1px solid rgba(229,207,146,0.3);
+      color:var(--gold);
+      font-weight:700;
+      letter-spacing:0.5px;
+      overflow:hidden;
+      transition:0.4s ease;
+      cursor:pointer;
     }
 
-    /* DYNAMISCHER CHAMPAGNER-GLOW UNTER DEM CURSOR */
-    .card::before {
-      content: '';
-      position: absolute;
-      top: var(--mouse-y, 0);
-      left: var(--mouse-x, 0);
-      width: 350px;
-      height: 350px;
-      background: radial-gradient(circle, rgba(229, 207, 146, 0.08) 0%, transparent 70%);
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-      z-index: 0;
+    .luxury-btn::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:-120%;
+      width:100%;
+      height:100%;
+      background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.15),
+        transparent
+      );
+      transition:0.8s ease;
     }
 
-    .card:hover::before {
-      opacity: 1;
+    .luxury-btn:hover::before{
+      left:120%;
     }
 
-    .card:hover {
-      border-color: rgba(229, 207, 146, 0.6);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(229, 207, 146, 0.02);
-      transform: translateY(-6px) scale(1.01);
+    .luxury-btn:hover{
+      background:rgba(229,207,146,0.08);
+      border-color:var(--gold);
+      transform:translateY(-3px);
+      box-shadow:0 0 35px rgba(229,207,146,0.15);
     }
 
-    .card * {
-      position: relative;
-      z-index: 1;
+    /* MAP */
+
+    .map-wrapper{
+      border:1px solid var(--border);
+      overflow:hidden;
+      border-radius:28px;
+      position:relative;
+      background:#000;
     }
 
-    .card h3 {
-      color: #ffffff;
-      margin-bottom: 15px;
-      font-size: 1.3rem;
-      font-weight: 400;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border-left: 2px solid #e5cf92;
-      padding-left: 15px;
-      transition: color 0.3s ease, transform 0.3s ease;
+    .map-wrapper iframe{
+      width:100%;
+      height:600px;
+      border:0;
+      filter:grayscale(1) invert(0.92) contrast(1.1) brightness(0.8);
     }
 
-    .card:hover h3 {
-      color: #e5cf92;
-      transform: translateX(3px);
+    /* CARDS */
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:28px;
     }
 
-    .card p {
-      color: rgba(241, 243, 245, 0.55);
-      line-height: 1.7;
-      font-size: 0.95rem;
-      font-weight: 300;
-      margin-bottom: 20px;
-      transition: color 0.3s ease;
+    .luxury-card{
+      position:relative;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.06);
+      padding:36px;
+      border-radius:26px;
+      overflow:hidden;
+      transition:0.45s ease;
+      isolation:isolate;
     }
 
-    .card:hover p {
-      color: rgba(241, 243, 245, 0.8);
+    .luxury-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+      radial-gradient(
+        600px circle at var(--mouse-x) var(--mouse-y),
+        rgba(229,207,146,0.15),
+        transparent 40%
+      );
+      opacity:0;
+      transition:opacity 0.35s ease;
+      z-index:-1;
     }
 
-    .click-details {
-      font-size: 0.75rem;
-      color: #e5cf92;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: 600;
-      opacity: 0.4;
-      transition: opacity 0.3s ease, letter-spacing 0.3s ease;
+    .luxury-card:hover::before{
+      opacity:1;
     }
 
-    .card:hover .click-details {
-      opacity: 1;
-      letter-spacing: 3px;
+    .luxury-card:hover{
+      transform:translateY(-12px);
+      border-color:rgba(229,207,146,0.45);
+      box-shadow:
+      0 10px 40px rgba(0,0,0,0.5),
+      0 0 40px rgba(229,207,146,0.08);
     }
 
-    /* PROFESSIONELLE KLICK-RÜCKMELDUNG */
-    .card:active {
-      transform: translateY(-2px) scale(0.99);
-      background: rgba(229, 207, 146, 0.03);
+    .city-name{
+      font-size:1.5rem;
+      margin-bottom:16px;
+      color:var(--gold);
+      font-weight:700;
     }
 
-    /* REISEPAKETE */
-    .card.featured {
-      border: 1px solid rgba(229, 207, 146, 0.5);
-      background: rgba(229, 207, 146, 0.01);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    .card-text{
+      color:var(--text-muted);
+      margin-bottom:24px;
+      font-size:0.97rem;
     }
 
-    .card.featured:hover {
-      border-color: #e5cf92;
+    .details-link{
+      color:var(--gold);
+      font-size:0.9rem;
+      letter-spacing:1px;
+      text-transform:uppercase;
     }
 
-    .package-price {
-      font-size: 2.8rem;
-      color: #e5cf92;
-      font-weight: 300;
-      margin: 15px 0 5px 0;
-      letter-spacing: 1px;
+    /* EXPERIENCES */
+
+    .experience-icon{
+      font-size:0.95rem;
+      color:var(--gold);
+      margin-bottom:18px;
+      letter-spacing:1px;
     }
 
-    .package-duration {
-      color: rgba(241, 243, 245, 0.35);
-      margin-bottom: 30px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 600;
+    /* PACKAGES */
+
+    .packages{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:30px;
+      align-items:stretch;
     }
 
-    .package-features {
-      text-align: left;
-      margin: 30px 0;
-      border-top: 1px solid rgba(229, 207, 146, 0.1);
+    .package-card{
+      position:relative;
+      padding:50px 40px;
+      border-radius:30px;
+      background:var(--card);
+      border:1px solid rgba(255,255,255,0.06);
+      transition:0.45s ease;
+      overflow:hidden;
     }
 
-    .package-features li {
-      list-style: none;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(241, 243, 245, 0.03);
-      font-size: 0.9rem;
-      color: rgba(241, 243, 245, 0.65);
-      padding-left: 20px;
-      position: relative;
+    .package-card:hover{
+      transform:translateY(-12px);
+      border-color:rgba(229,207,146,0.45);
+      box-shadow:0 0 40px rgba(229,207,146,0.1);
     }
 
-    .package-features li:before {
-      content: "—";
-      position: absolute;
-      left: 0;
-      color: #e5cf92;
+    .package-card.featured{
+      border:1px solid rgba(229,207,146,0.45);
+      transform:scale(1.03);
+      background:
+      linear-gradient(180deg, rgba(229,207,146,0.08), rgba(255,255,255,0.02));
     }
 
-    .package-card button {
-      padding: 16px;
-      background: transparent;
-      color: #ffffff;
-      border: 1px solid rgba(229, 207, 146, 0.3);
-      cursor: pointer;
-      width: 100%;
-      font-weight: 500;
-      text-transform: uppercase;
-      font-size: 12px;
-      letter-spacing: 2px;
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-      transition: all 0.4s ease;
+    .package-name{
+      font-size:1.8rem;
+      margin-bottom:18px;
+      color:var(--gold);
+      font-weight:700;
     }
 
-    .package-card button:hover {
-      background: #e5cf92;
-      color: #050608;
-      border-color: #e5cf92;
-      box-shadow: 0 10px 25px rgba(229, 207, 146, 0.25);
+    .price{
+      font-size:3rem;
+      font-weight:800;
+      margin-bottom:26px;
+      letter-spacing:-2px;
     }
 
-    /* CHARTER-SYSTEMPLÄNE */
-    #contact {
-      background: #090b0e;
+    .package-features{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      margin-bottom:38px;
+      color:#d6d6d6;
     }
 
-    .contact-container {
-      max-width: 650px;
-      margin: 0 auto;
+    /* CONTACT */
+
+    .contact-grid{
+      display:grid;
+      grid-template-columns:1fr 1.2fr;
+      gap:40px;
     }
 
-    .contact-info {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      margin-bottom: 40px;
+    .contact-info,
+    .contact-form{
+      background:rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:30px;
+      padding:42px;
     }
 
-    .contact-item h4 {
-      color: #e5cf92;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      font-weight: 500;
-      letter-spacing: 2px;
+    .contact-title{
+      font-size:2rem;
+      margin-bottom:28px;
+      color:var(--gold);
     }
 
-    .contact-item p {
-      color: rgba(241, 243, 245, 0.6);
-      font-size: 1.05rem;
+    .contact-item{
+      margin-bottom:24px;
     }
 
-    input, textarea {
-      width: 100%;
-      padding: 16px;
-      margin-bottom: 20px;
-      background: rgba(5, 6, 8, 0.6);
-      border: 1px solid rgba(229, 207, 146, 0.15);
-      color: #ffffff;
-      font-family: inherit;
-      font-size: 15px;
-      transition: all 0.3s ease;
+    .contact-label{
+      color:var(--gold);
+      margin-bottom:6px;
+      display:block;
+      font-size:0.9rem;
+      letter-spacing:1px;
     }
 
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: #e5cf92;
-     
+    form{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    input,
+    textarea{
+      width:100%;
+      background:#0d0d0d;
+      border:1px solid rgba(255,255,255,0.08);
+      padding:18px 20px;
+      color:white;
+      font-family:'Manrope', sans-serif;
+      border-radius:16px;
+      outline:none;
+      transition:0.3s ease;
+    }
+
+    textarea{
+      min-height:160px;
+      resize:vertical;
+    }
+
+    input:focus,
+    textarea:focus{
+      border-color:rgba(229,207,146,0.45);
+      box-shadow:0 0 25px rgba(229,207,146,0.08);
+    }
+
+    /* FOOTER */
+
+    footer{
+      padding:40px 0;
+      border-top:1px solid rgba(255,255,255,0.06);
+      text-align:center;
+      color:#9a9a9a;
+      font-size:0.9rem;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width:1100px){
+
+      .hero h1{
+        font-size:4.5rem;
+      }
+
+      .contact-grid{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+    @media(max-width:768px){
+
+      .nav-links{
+        display:none;
+      }
+
+      .hero h1{
+        font-size:3.5rem;
+        letter-spacing:-2px;
+      }
+
+      .section-title{
+        font-size:2.2rem;
+      }
+
+      section{
+        padding:90px 0;
+      }
+
+      .package-card.featured{
+        transform:none;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar">
+    <div class="container nav-inner">
+
+      <a href="#" class="logo">Fly Roye</a>
+
+      <div class="nav-links">
+        <a href="#flightplan">Flugplan</a>
+        <a href="#highlights">Highlights</a>
+        <a href="#experiences">Erlebnisse</a>
+        <a href="#packages">Pakete</a>
+        <a href="#contact">Charter</a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="container hero-content">
+
+      <div class="hero-tag">
+        EXCLUSIVE WORLDWIDE LUXURY TRAVEL
+      </div>
+
+      <h1>Erlebe die Welt in Luxus</h1>
+
+      <p>
+        Fly Roye erschafft aussergewöhnliche Weltreisen mit
+        First-Class-Komfort, privaten Erlebnissen und exklusivem
+        Zugang zu den faszinierendsten Destinationen der Erde.
+      </p>
+
+      <a href="#flightplan" class="luxury-btn">
+        Reise entdecken
+      </a>
+
+    </div>
+
+  </section>
+
+  <!-- FLIGHT PLAN -->
+
+  <section id="flightplan">
+
+    <div class="container">
+
+      <h2 class="section-title">Globaler Flugplan</h2>
+
+      <p class="section-subtitle">
+        Eine exklusive Weltreise über ikonische Metropolen,
+        versteckte Paradiese und aussergewöhnliche Luxusdestinationen.
+      </p>
+
+      <div class="map-wrapper">
+
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27603588.785589274!2d-17.00334157030853!3d32.48102881840392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzLCsDI4JzUxLjciTiAxN8KwMDAnMTIuMCJX!5e0!3m2!1sde!2sch!4v1710000000000!5m2!1sde!2sch"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- HIGHLIGHTS -->
+
+  <section id="highlights">
+
+    <div class="container">
+
+      <h2 class="section-title">Destination Highlights</h2>
+
+      <p class="section-subtitle">
+        Acht legendäre Destinationen. Acht völlig unterschiedliche
+        Luxus-Erlebnisse auf einer Reise rund um den Globus.
+      </p>
+
+      <div class="grid">
+
+        <div class="luxury-card">
+          <h3 class="city-name">Zürich</h3>
+          <p class="card-text">
+            Eleganz am Zürichsee, private Shopping-Erlebnisse,
+            exklusive Lounges und Schweizer Präzision.
+          </p>
+          <span class="details-link">Details anzeigen</span>
+        </div>
+
+        <div class="luxury-card">
+          <h3 class="city-name">Stockholm</h3>
+          <p class="card-text">
+            Skandinavischer Luxus trifft auf modernes Design,
+            Fine Dining und spektakuläre Waterfront-Hotels.
+          </p>
+          <span class="details-link">Details anzeigen</span>
+        </div>
+
+        <div class="luxury-card">
+          <h3 class="city-name">Las Vegas</h3>
+          <p class="card-text">
+            Private Suites, exklusive Shows und VIP-Nightlife
+            in der glamourösesten Stadt Nevadas.
+          </p>
+          <span class="details-link">Details anzeigen</span>
+        </div>
+
+        <div class="luxury-card">
+          <h3 class="city-name">Mexico City</h3>
+          <p class="card-text">
+            Historische Kultur kombiniert mit modernen Rooftop-Lounges,
+            Gourmetküche und luxuriösen Hideaways.
+          </p>
+          <span class="details-link">Details anzeigen</span>
+        </div>
+
+        <div class="luxury-card">
+          <h3 class="city-name">Rio de Janeiro</h3>
+          <p class="card-text">
+            Atemberaubende Küsten, exklusive Strandclubs und
+            spektakuläre Panoramablicke über Rio.
+          </p>
+          <span class="details-link">Details anzeigen</span>
+        </div>
+
+        <div class="luxury-card">
+          <h3 class="city-name">Sydney</h3>
+          <p class="card-text">
+            Luxus am Hafen, ikonische Architektur und
+            aussergewöhnliche Yacht- und Fine-Dining-Erlebnisse.
+          </p>
+          <span class="details-link">Details anzeigen</span>
+        </div>
+
+        <div class="luxury-card">
+          <h3 class="city-name">Bali</h3>
+          <p class="card-text">
+            Private Villas im Dschungel, Infinity Pools,
+            Wellness Retreats und tropische Ruhe.
+          </p>
+          <span class="details-link">Details anzeigen</span>
+        </div>
+
+        <div class="luxury-card">
+          <h3 class="city-name">Tokyo</h3>
+          <p class="card-text">
+            Futuristische Eleganz, Michelin-Restaurants,
+            Luxus-Shopping und einzigartige Skyline-Nächte.
+          </p>
+          <span class="details-link">Details anzeigen</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- EXPERIENCES -->
+
+  <section id="experiences">
+
+    <div class="container">
+
+      <h2 class="section-title">Exklusive Erlebnisse</h2>
+
+      <p class="section-subtitle">
+        Jeder Moment der Reise ist bis ins kleinste Detail
+        auf Luxus, Komfort und Privatsphäre ausgelegt.
+      </p>
+
+      <div class="grid">
+
+        <div class="luxury-card">
+          <div class="experience-icon">[+]</div>
+          <h3 class="city-name">5-Sterne Hotels</h3>
+          <p class="card-text">
+            Aufenthalte in den renommiertesten Hotels und
+            privaten Luxusresorts weltweit.
+          </p>
+        </div>
+
+        <div class="luxury-card">
+          <div class="experience-icon">[+]</div>
+          <h3 class="city-name">First & Business Class</h3>
+          <p class="card-text">
+            Maximale Privatsphäre und Komfort auf jeder Etappe
+            Ihrer Weltreise.
+          </p>
+        </div>
+
+        <div class="luxury-card">
+          <div class="experience-icon">[+]</div>
+          <h3 class="city-name">Michelin-Stern Dining</h3>
+          <p class="card-text">
+            Kulinarische Meisterwerke in den exklusivsten
+            Restaurants der Welt.
+          </p>
+        </div>
+
+        <div class="luxury-card">
+          <div class="experience-icon">[+]</div>
+          <h3 class="city-name">VIP Events & Shows</h3>
+          <p class="card-text">
+            Exklusive Zugänge zu Konzerten, Galas,
+            Sportevents und privaten Veranstaltungen.
+          </p>
+        </div>
+
+        <div class="luxury-card">
+          <div class="experience-icon">[+]</div>
+          <h3 class="city-name">Luxus Transportation</h3>
+          <p class="card-text">
+            Private Chauffeure, Yachten, Helikopter
+            und exklusive Transfers weltweit.
+          </p>
+        </div>
+
+        <div class="luxury-card">
+          <div class="experience-icon">[+]</div>
+          <h3 class="city-name">Spa & Wellness</h3>
+          <p class="card-text">
+            Erholung auf höchstem Niveau mit exklusiven
+            Wellness- und Spa-Erlebnissen.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PACKAGES -->
+
+  <section id="packages">
+
+    <div class="container">
+
+      <h2 class="section-title">Luxus Reisepakete</h2>
+
+      <p class="section-subtitle">
+        Drei sorgfältig kuratierte Pakete für unterschiedliche
+        Ansprüche an Luxus und Exklusivität.
+      </p>
+
+      <div class="packages">
+
+        <div class="package-card">
+
+          <h3 class="package-name">Classic</h3>
+
+          <div class="price">
+            CHF 24'999
+          </div>
+
+          <div class="package-features">
+            <span>— Business Class Flüge</span>
+            <span>— Premium Hotels</span>
+            <span>— Private Transfers</span>
+            <span>— Concierge Support</span>
+          </div>
+
+          <button class="luxury-btn">
+            Paket wählen
+          </button>
+
+        </div>
+
+        <div class="package-card featured">
+
+          <h3 class="package-name">Premium</h3>
+
+          <div class="price">
+            CHF 49'999
+          </div>
+
+          <div class="package-features">
+            <span>— First Class Upgrades</span>
+            <span>— 5-Sterne Luxusresorts</span>
+            <span>— Michelin Dining</span>
+            <span>— VIP Experiences</span>
+          </div>
+
+          <button class="luxury-btn">
+            Paket wählen
+          </button>
+
+        </div>
+
+        <div class="package-card">
+
+          <h3 class="package-name">Ultimate</h3>
+
+          <div class="price">
+            CHF 79'999
+          </div>
+
+          <div class="package-features">
+            <span>— Private Aviation Optionen</span>
+            <span>— Presidential Suites</span>
+            <span>— Persönlicher Travel Manager</span>
+            <span>— Vollständig massgeschneiderte Reise</span>
+          </div>
+
+          <button class="luxury-btn">
+            Paket wählen
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CONTACT -->
+
+  <section id="contact">
+
+    <div class="container">
+
+      <h2 class="section-title">Private Charter Anfrage</h2>
+
+      <p class="section-subtitle">
+        Kontaktieren Sie unser internationales Charter-Operations-Team
+        für eine vollständig personalisierte Luxusreise.
+      </p>
+
+      <div class="contact-grid">
+
+        <div class="contact-info">
+
+          <h3 class="contact-title">
+            Fly Roye Operations Desk
+          </h3>
+
+          <div class="contact-item">
+            <span class="contact-label">Telefon</span>
+            <p>+41 (0) 44 123 45 67</p>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-label">E-Mail</span>
+            <p>info@flyroye.com</p>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-label">Verfügbarkeit</span>
+            <p>24/7 International Luxury Travel Support</p>
+          </div>
+
+        </div>
+
+        <div class="contact-form">
+
+          <form>
+
+            <input type="text" placeholder="Name">
+
+            <input type="email" placeholder="E-Mail">
+
+            <input type="tel" placeholder="Telefon">
+
+            <input type="date">
+
+            <textarea placeholder="Beschreiben Sie Ihre Reisewünsche"></textarea>
+
+            <button class="luxury-btn" type="submit">
+              Anfrage senden
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer>
+    © 2026 Fly Roye
+  </footer>
+
+</body>
+</html>
