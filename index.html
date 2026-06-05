@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
 
@@ -59,8 +62,8 @@
       position:fixed;
       inset:0;
       background-image:
-      linear-gradient(0deg, transparent 24%, rgba(218,177,93, 0.008) 25%, rgba(218,177,93, 0.008) 26%, transparent 27%, transparent 74%, rgba(218,177,93, 0.008) 75%, rgba(218,177,93, 0.008) 76%, transparent 77%, transparent),
-      linear-gradient(90deg, transparent 24%, rgba(218,177,93, 0.008) 25%, rgba(218,177,93, 0.008) 26%, transparent 27%, transparent 74%, rgba(218,177,93, 0.008) 75%, rgba(218,177,93, 0.008) 76%, transparent 77%, transparent);
+      linear-gradient(0deg, transparent 24%, rgba(218,177,93, 0.008) 25%, rgba(218,177,93, 0.008) 26%, transparent 27%, transparent 74%, rgba(218,177,93, 0.008) 75%, rgba(218,177,93, 0.008) 76%, transparent 77%, transparent 100%),
+      linear-gradient(90deg, transparent 24%, rgba(218,177,93, 0.008) 25%, rgba(218,177,93, 0.008) 26%, transparent 27%, transparent 74%, rgba(218,177,93, 0.008) 75%, rgba(218,177,93, 0.008) 76%, transparent 77%, transparent 100%);
       background-size:60px 60px;
       pointer-events:none;
       z-index:-1;
@@ -325,12 +328,42 @@
       pointer-events:none;
     }
 
-    .map-wrapper iframe{
+    #worldMap{
       width:100%;
       height:650px;
-      border:0;
-      filter:grayscale(0.8) invert(0.92) contrast(1.2) brightness(0.7);
+      border-radius:16px;
       display:block;
+    }
+
+    .leaflet-container{
+      background:linear-gradient(135deg, rgba(26,26,26,0.9), rgba(18,18,18,0.9)) !important;
+      border-radius:16px;
+    }
+
+    .leaflet-marker-icon{
+      filter:drop-shadow(0 0 8px rgba(218,177,93,0.5));
+    }
+
+    .leaflet-popup-content-wrapper{
+      background:rgba(26,26,26,0.95) !important;
+      border:1px solid var(--gold) !important;
+      border-radius:8px !important;
+      box-shadow:0 10px 30px rgba(0,0,0,0.7) !important;
+    }
+
+    .leaflet-popup-content{
+      color:var(--text) !important;
+      font-family:'Montserrat', sans-serif !important;
+      font-size:0.95rem !important;
+    }
+
+    .leaflet-popup-tip-container{
+      display:none;
+    }
+
+    .destination-marker{
+      font-size:1.8rem;
+      text-shadow:0 2px 8px rgba(0,0,0,0.8);
     }
 
     /* CARDS */
@@ -601,208 +634,6 @@
       box-shadow:0 0 30px rgba(218,177,93,0.15);
     }
 
-    /* MODAL */
-
-    .modal{
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.92);
-      backdrop-filter:blur(12px);
-      z-index:2000;
-      align-items:center;
-      justify-content:center;
-      animation:fadeIn 0.4s ease;
-      padding:20px;
-    }
-
-    .modal.active{
-      display:flex;
-    }
-
-    @keyframes fadeIn{
-      from{opacity:0;}
-      to{opacity:1;}
-    }
-
-    .modal-content{
-      background:linear-gradient(135deg, rgba(26,26,26,0.98), rgba(18,18,18,0.98));
-      border:2px solid var(--border);
-      border-radius:20px;
-      padding:60px;
-      max-width:800px;
-      width:100%;
-      max-height:85vh;
-      overflow-y:auto;
-      animation:slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-      position:relative;
-      box-shadow:0 30px 90px rgba(0,0,0,0.7), 0 0 60px rgba(218,177,93,0.2);
-    }
-
-    @keyframes slideUp{
-      from{
-        opacity:0;
-        transform:translateY(120px);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-
-    .modal-close{
-      position:absolute;
-      top:30px;
-      right:30px;
-      background:none;
-      border:none;
-      color:var(--gold);
-      font-size:2.5rem;
-      cursor:pointer;
-      transition:0.3s ease;
-      width:50px;
-      height:50px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .modal-close:hover{
-      transform:rotate(90deg) scale(1.2);
-      color:var(--gold-light);
-    }
-
-    .modal-title{
-      font-family:'Playfair Display', serif;
-      font-size:3rem;
-      margin-bottom:10px;
-      color:var(--gold-light);
-      font-weight:900;
-    }
-
-    .modal-subtitle{
-      color:var(--text-muted);
-      margin-bottom:45px;
-      font-size:1.1rem;
-      font-weight:300;
-    }
-
-    .modal-section{
-      margin-bottom:40px;
-    }
-
-    .modal-section-title{
-      font-family:'Playfair Display', serif;
-      font-size:1.6rem;
-      color:var(--gold);
-      margin-bottom:20px;
-      font-weight:800;
-      letter-spacing:-0.5px;
-    }
-
-    .hotel-item,
-    .activity-item{
-      background:linear-gradient(135deg, rgba(218,177,93,0.12), rgba(218,177,93,0.06));
-      border:1px solid rgba(218,177,93,0.25);
-      padding:22px;
-      border-radius:12px;
-      margin-bottom:14px;
-      transition:0.4s ease;
-    }
-
-    .hotel-item:hover,
-    .activity-item:hover{
-      background:linear-gradient(135deg, rgba(218,177,93,0.18), rgba(218,177,93,0.1));
-      border-color:rgba(218,177,93,0.5);
-      transform:translateX(8px);
-    }
-
-    .item-name{
-      color:var(--gold-light);
-      font-weight:700;
-      font-size:1.1rem;
-      margin-bottom:6px;
-    }
-
-    .item-desc{
-      color:var(--text-muted);
-      font-size:0.95rem;
-      margin-bottom:10px;
-      font-weight:300;
-    }
-
-    .item-price{
-      color:var(--gold);
-      font-weight:700;
-      font-size:1.15rem;
-    }
-
-    /* FLIGHT SIMULATION */
-
-    .flight-simulator{
-      background:linear-gradient(135deg, rgba(26,26,26,0.95), rgba(18,18,18,0.95));
-      border:2px solid var(--border);
-      border-radius:20px;
-      padding:50px;
-      margin-top:70px;
-      box-shadow:0 20px 60px rgba(0,0,0,0.5);
-    }
-
-    .flight-simulator-title{
-      font-family:'Playfair Display', serif;
-      font-size:2rem;
-      color:var(--gold-light);
-      margin-bottom:35px;
-      font-weight:800;
-      letter-spacing:-0.5px;
-    }
-
-    #simulationCanvas{
-      width:100%;
-      height:550px;
-      border:2px solid var(--border);
-      border-radius:16px;
-      background:radial-gradient(circle at center, rgba(218,177,93,0.08), rgba(10,10,10,0.8));
-      display:block;
-      margin-bottom:35px;
-      box-shadow:inset 0 0 40px rgba(218,177,93,0.1);
-    }
-
-    .simulation-controls{
-      display:flex;
-      gap:18px;
-      justify-content:center;
-      flex-wrap:wrap;
-    }
-
-    .simulation-controls button{
-      padding:14px 35px;
-      background:rgba(218,177,93,0.12);
-      border:1px solid rgba(218,177,93,0.4);
-      color:var(--gold);
-      font-weight:600;
-      border-radius:8px;
-      cursor:pointer;
-      transition:0.4s ease;
-      font-family:'Montserrat', sans-serif;
-      font-size:0.95rem;
-      text-transform:uppercase;
-      letter-spacing:1px;
-    }
-
-    .simulation-controls button:hover{
-      background:rgba(218,177,93,0.25);
-      border-color:var(--gold);
-      box-shadow:0 0 30px rgba(218,177,93,0.2);
-      transform:translateY(-2px);
-    }
-
-    .simulation-controls button.active{
-      background:var(--gold);
-      color:var(--bg);
-      box-shadow:0 10px 30px rgba(218,177,93,0.4);
-    }
-
     /* FOOTER */
 
     footer{
@@ -856,16 +687,8 @@
         transform:translateY(-18px);
       }
 
-      .modal-content{
-        padding:40px;
-      }
-
-      .modal-title{
-        font-size:2rem;
-      }
-
-      #simulationCanvas{
-        height:320px;
+      #worldMap{
+        height:400px;
       }
 
       .contact-grid{
@@ -937,13 +760,7 @@
       </p>
 
       <div class="map-wrapper">
-
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27603588.785589274!2d-17.00334157030853!3d32.48102881840392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzLCsDI4J[...]
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-
+        <div id="worldMap"></div>
       </div>
 
     </div>
@@ -1001,29 +818,20 @@
           <span class="details-link">→ Details Anzeigen</span>
         </div>
 
-        <div class="luxury-card" data-destination="rio">
-          <h3 class="city-name">Rio de Janeiro</h3>
+        <div class="luxury-card" data-destination="dubai">
+          <h3 class="city-name">Dubai</h3>
           <p class="card-text">
-            Atemberaubende Küsten, exklusive Strandclubs und
-            spektakuläre Panoramablicke über Rio.
+            Futuristische Architektur, ultramoderne Resorts
+            und erstklassige Beachfront-Erlebnisse.
           </p>
           <span class="details-link">→ Details Anzeigen</span>
         </div>
 
-        <div class="luxury-card" data-destination="sydney">
-          <h3 class="city-name">Sydney</h3>
+        <div class="luxury-card" data-destination="paris">
+          <h3 class="city-name">Paris</h3>
           <p class="card-text">
-            Luxus am Hafen, ikonische Architektur und
-            aussergewöhnliche Yacht- und Fine-Dining-Erlebnisse.
-          </p>
-          <span class="details-link">→ Details Anzeigen</span>
-        </div>
-
-        <div class="luxury-card" data-destination="bali">
-          <h3 class="city-name">Bali</h3>
-          <p class="card-text">
-            Private Villas im Dschungel, Infinity Pools,
-            Wellness Retreats und tropische Ruhe.
+            Klassischer Pariser Chic mit Michelin-Sternen-Restaurants
+            und exklusiven Boutique-Hotels.
           </p>
           <span class="details-link">→ Details Anzeigen</span>
         </div>
@@ -1031,23 +839,21 @@
         <div class="luxury-card" data-destination="tokyo">
           <h3 class="city-name">Tokyo</h3>
           <p class="card-text">
-            Futuristische Eleganz, Michelin-Restaurants,
-            Luxus-Shopping und einzigartige Skyline-Nächte.
+            Tradition trifft Innovation in Japans kulinarischer
+            und architektonischer Hauptstadt.
           </p>
           <span class="details-link">→ Details Anzeigen</span>
         </div>
 
-      </div>
-
-      <!-- FLIGHT SIMULATION -->
-      <div class="flight-simulator">
-        <h3 class="flight-simulator-title">✈ Interaktive Flugsimulation</h3>
-        <canvas id="simulationCanvas"></canvas>
-        <div class="simulation-controls">
-          <button id="startBtn">▶ Starten</button>
-          <button id="pauseBtn">⏸ Pause</button>
-          <button id="resetBtn">↺ Zurücksetzen</button>
+        <div class="luxury-card" data-destination="sydney">
+          <h3 class="city-name">Sydney</h3>
+          <p class="card-text">
+            Spektakuläre Küstenluxusresorts, Premium Dining
+            und Australiens führende Lifestyle-Destination.
+          </p>
+          <span class="details-link">→ Details Anzeigen</span>
         </div>
+
       </div>
 
     </div>
@@ -1060,67 +866,42 @@
 
     <div class="container">
 
-      <h2 class="section-title">Exklusive Erlebnisse</h2>
+      <h2 class="section-title">Luxus-Erlebnisse</h2>
 
       <p class="section-subtitle">
-        Jeder Moment der Reise ist bis ins kleinste Detail
-        auf Luxus, Komfort und Privatsphäre ausgelegt.
+        Handverlesene Aktivitäten für unvergessliche Momente.
       </p>
 
       <div class="grid">
 
         <div class="luxury-card">
-          <span class="experience-icon">🏨</span>
-          <h3 class="city-name">5-Sterne Hotels</h3>
+          <span class="experience-icon">✈️</span>
+          <h3 class="city-name">Private Jet Charter</h3>
           <p class="card-text">
-            Aufenthalte in den renommiertesten Hotels und
-            privaten Luxusresorts weltweit.
+            Fliegen Sie zu Ihren Wunschdestinationen mit maximaler
+            Flexibilität und exklusivem VIP-Service.
           </p>
+          <span class="details-link">→ Mehr Erfahren</span>
         </div>
 
         <div class="luxury-card">
-          <span class="experience-icon">✈️</span>
-          <h3 class="city-name">First & Business Class</h3>
+          <span class="experience-icon">🏨</span>
+          <h3 class="city-name">Boutique Resorts</h3>
           <p class="card-text">
-            Maximale Privatsphäre und Komfort auf jeder Etappe
-            Ihrer Weltreise.
+            Handverlesene Premium-Unterkünfte mit persönlichem
+            Concierge-Service und exklusiven Annehmlichkeiten.
           </p>
+          <span class="details-link">→ Mehr Erfahren</span>
         </div>
 
         <div class="luxury-card">
           <span class="experience-icon">🍽️</span>
-          <h3 class="city-name">Michelin-Stern Dining</h3>
+          <h3 class="city-name">Gourmet Cuisine</h3>
           <p class="card-text">
-            Kulinarische Meisterwerke in den exklusivsten
-            Restaurants der Welt.
+            Private Dinner mit Michelin-Sternen-Köchen und
+            maßgeschneiderte kulinarische Erlebnisse.
           </p>
-        </div>
-
-        <div class="luxury-card">
-          <span class="experience-icon">🎭</span>
-          <h3 class="city-name">VIP Events & Shows</h3>
-          <p class="card-text">
-            Exklusive Zugänge zu Konzerten, Galas,
-            Sportevents und privaten Veranstaltungen.
-          </p>
-        </div>
-
-        <div class="luxury-card">
-          <span class="experience-icon">🚁</span>
-          <h3 class="city-name">Luxus Transportation</h3>
-          <p class="card-text">
-            Private Chauffeure, Yachten, Helikopter
-            und exklusive Transfers weltweit.
-          </p>
-        </div>
-
-        <div class="luxury-card">
-          <span class="experience-icon">🧘</span>
-          <h3 class="city-name">Spa & Wellness</h3>
-          <p class="card-text">
-            Erholung auf höchstem Niveau mit exklusiven
-            Wellness- und Spa-Erlebnissen.
-          </p>
+          <span class="details-link">→ Mehr Erfahren</span>
         </div>
 
       </div>
@@ -1135,76 +916,51 @@
 
     <div class="container">
 
-      <h2 class="section-title">Luxus Reisepakete</h2>
+      <h2 class="section-title">Reisepakete</h2>
 
       <p class="section-subtitle">
-        Drei sorgfältig kuratierte Pakete für unterschiedliche
-        Ansprüche an Luxus und Exklusivität.
+        Curated Luxury Travel Collections für Ihre nächste Weltreise.
       </p>
 
       <div class="packages">
 
         <div class="package-card">
-
-          <h3 class="package-name">Classic</h3>
-
-          <div class="price">
-            CHF 24'999
-          </div>
-
-          <div class="package-features">
-            <span>✓ Business Class Flüge</span>
-            <span>✓ Premium Hotels</span>
-            <span>✓ Private Transfers</span>
-            <span>✓ Concierge Support</span>
-          </div>
-
-          <button class="luxury-btn">
-            Paket Wählen
-          </button>
-
+          <h3 class="package-name">Europäische Eleganz</h3>
+          <div class="price">€28.500</div>
+          <ul class="package-features">
+            <li>✓ 14 Tage / 13 Nächte</li>
+            <li>✓ Zürich → Stockholm → Paris</li>
+            <li>✓ 5-Stern Hotels inklusive</li>
+            <li>✓ Private Führungen & Touren</li>
+            <li>✓ Michelin-Restaurant-Dinner</li>
+          </ul>
+          <button class="luxury-btn">Buchen</button>
         </div>
 
         <div class="package-card featured">
-
-          <h3 class="package-name">Premium</h3>
-
-          <div class="price">
-            CHF 49'999
-          </div>
-
-          <div class="package-features">
-            <span>✓ First Class Upgrades</span>
-            <span>✓ 5-Sterne Luxusresorts</span>
-            <span>✓ Michelin Dining</span>
-            <span>✓ VIP Experiences</span>
-          </div>
-
-          <button class="luxury-btn">
-            Paket Wählen
-          </button>
-
+          <h3 class="package-name">Globale Luxus-Odyssee</h3>
+          <div class="price">€89.000</div>
+          <ul class="package-features">
+            <li>✓ 30 Tage / 28 Nächte</li>
+            <li>✓ Alle 8 Destinationen</li>
+            <li>✓ Private Jet Transfer</li>
+            <li>✓ Ultra-Luxury Resorts</li>
+            <li>✓ Persönlicher Concierge</li>
+          </ul>
+          <button class="luxury-btn">Buchen</button>
         </div>
 
         <div class="package-card">
-
-          <h3 class="package-name">Ultimate</h3>
-
-          <div class="price">
-            CHF 79'999
-          </div>
-
-          <div class="package-features">
-            <span>✓ Private Aviation Optionen</span>
-            <span>✓ Presidential Suites</span>
-            <span>✓ Persönlicher Travel Manager</span>
-            <span>✓ Vollständig Massgeschneiderte Reise</span>
-          </div>
-
-          <button class="luxury-btn">
-            Paket Wählen
-          </button>
-
+          <h3 class="package-name">Orientalischer Traum</h3>
+          <div class="price">€42.000</div>
+          <ul class="package-features">
+            <li>✓ 10 Tage / 9 Nächte</li>
+            <li>✓ Dubai → Tokyo → Sydney</li>
+            <li>✓ Premium Beach Resorts</li>
+            <li>✓ VIP City Tours</li>
+            <li>✓ Spa & Wellness</li>
+          </ul>
+          <button class="luxury-btn">Buchen</button>
         </div>
 
       </div>
@@ -1219,59 +975,52 @@
 
     <div class="container">
 
-      <h2 class="section-title">Private Charter Anfrage</h2>
-
-      <p class="section-subtitle">
-        Kontaktieren Sie unser internationales Charter-Operations-Team
-        für eine vollständig personalisierte Luxusreise.
-      </p>
+      <h2 class="section-title">Deine Reise Beginnt Hier</h2>
 
       <div class="contact-grid">
 
         <div class="contact-info">
 
-          <h3 class="contact-title">
-            Fly Roye Operations Desk
-          </h3>
+          <h3 class="contact-title">Kontakt Informationen</h3>
 
           <div class="contact-item">
-            <span class="contact-label">☎ Telefon</span>
-            <p>+41 (0) 44 123 45 67</p>
+            <span class="contact-label">📞 Telefon</span>
+            <p>+41 44 555 0123</p>
           </div>
 
           <div class="contact-item">
-            <span class="contact-label">✉ E-Mail</span>
-            <p>info@flyroye.com</p>
+            <span class="contact-label">📧 E-Mail</span>
+            <p>hello@flyroye.com</p>
           </div>
 
           <div class="contact-item">
-            <span class="contact-label">🕐 Verfügbarkeit</span>
-            <p>24/7 International Luxury Travel Support</p>
+            <span class="contact-label">📍 Adresse</span>
+            <p>Bahnhofstrasse 1<br>8001 Zürich, Switzerland</p>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-label">🕐 Öffnungszeiten</span>
+            <p>Montag - Freitag: 09:00 - 18:00<br>
+            Samstag: 10:00 - 16:00<br>
+            Sonntag: Geschlossen</p>
           </div>
 
         </div>
 
-        <div class="contact-form">
+        <form class="contact-form">
 
-          <form>
+          <h3 class="contact-title">Anfrage Senden</h3>
 
-            <input type="text" placeholder="Vollständiger Name">
+          <input type="text" placeholder="Ihr Name" required>
+          <input type="email" placeholder="Ihre E-Mail" required>
+          <input type="text" placeholder="Betreff">
+          <textarea placeholder="Ihre Nachricht..." required></textarea>
 
-            <input type="email" placeholder="E-Mail Adresse">
+          <button type="submit" class="luxury-btn" style="width:100%;margin-top:10px;">
+            Nachricht Senden
+          </button>
 
-            <input type="tel" placeholder="Telefonnummer">
-
-            <input type="date" placeholder="Geplantes Reisedatum">
-
-            <textarea placeholder="Beschreiben Sie Ihre persönlichen Reisewünsche..."></textarea>
-
-            <button class="luxury-btn" type="submit">
-              ✓ Anfrage Absenden
-            </button>
-
-          </form>
-
-        </div>
+        </form>
 
       </div>
 
@@ -1282,35 +1031,71 @@
   <!-- FOOTER -->
 
   <footer>
-    © 2026 FLY ROYE™ — Luxury World Travel Agency. All rights reserved.
+    <div class="container">
+      <p>© 2026 Fly Roye. Alle Rechte vorbehalten. | Luxury Travel Agency</p>
+    </div>
   </footer>
 
-  <!-- MODAL FOR DESTINATION DETAILS -->
-  <div id="destinationModal" class="modal">
-    <div class="modal-content">
-      <button class="modal-close">&times;</button>
-      <h2 class="modal-title" id="modalTitle">Destination</h2>
-      <p class="modal-subtitle" id="modalSubtitle">Luxus Reiseerlebnis</p>
+  <script>
+    // Card Mouse Move Effect
+    document.querySelectorAll('.luxury-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', x + 'px');
+        card.style.setProperty('--mouse-y', y + 'px');
+      });
+    });
 
-      <div class="modal-section">
-        <h3 class="modal-section-title">🏨 Hotels & Resorts</h3>
-        <div id="hotelsList"></div>
-      </div>
+    // World Map with Leaflet
+    const destinations = [
+      { name: 'Zürich', lat: 47.3769, lng: 8.5472, emoji: '🇨🇭' },
+      { name: 'Stockholm', lat: 59.3293, lng: 18.0686, emoji: '🇸🇪' },
+      { name: 'Las Vegas', lat: 36.1699, lng: -115.1398, emoji: '🇺🇸' },
+      { name: 'Mexico City', lat: 19.4326, lng: -99.1332, emoji: '🇲🇽' },
+      { name: 'Dubai', lat: 25.2048, lng: 55.2708, emoji: '🇦🇪' },
+      { name: 'Paris', lat: 48.8566, lng: 2.3522, emoji: '🇫🇷' },
+      { name: 'Tokyo', lat: 35.6762, lng: 139.6503, emoji: '🇯🇵' },
+      { name: 'Sydney', lat: -33.8688, lng: 151.2093, emoji: '🇦🇺' }
+    ];
 
-      <div class="modal-section">
-        <h3 class="modal-section-title">🎭 Aktivitäten & Erlebnisse</h3>
-        <div id="activitiesList"></div>
-      </div>
+    // Initialize map
+    const map = L.map('worldMap').setView([20, 10], 2);
 
-      <div class="modal-section">
-        <h3 class="modal-section-title">💎 Preisübersicht</h3>
-        <div id="priceInfo"></div>
-      </div>
-    </div>
-  </div>
+    // Custom dark tile layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+      attribution: '',
+      maxZoom: 19
+    }).addTo(map);
 
-<script src="script.js"></script>
+    // Add markers for each destination
+    destinations.forEach(dest => {
+      const icon = L.divIcon({
+        html: `<div class="destination-marker">${dest.emoji}</div>`,
+        iconSize: [40, 40],
+        className: 'custom-marker'
+      });
+
+      L.marker([dest.lat, dest.lng], { icon: icon })
+        .bindPopup(`<strong>${dest.name}</strong><br>Luxus-Destination`)
+        .addTo(map);
+    });
+
+    // Draw flight connections
+    destinations.forEach((dest, idx) => {
+      const nextDest = destinations[(idx + 1) % destinations.length];
+      L.polyline([
+        [dest.lat, dest.lng],
+        [nextDest.lat, nextDest.lng]
+      ], {
+        color: '#dab15d',
+        weight: 2,
+        opacity: 0.5,
+        dashArray: '5, 5'
+      }).addTo(map);
+    });
+  </script>
+
 </body>
-  <div class="custom-cursor"></div>
-<div class="cursor-ring"></div>
 </html>
