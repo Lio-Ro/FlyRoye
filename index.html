@@ -1095,6 +1095,183 @@
         dashArray: '5, 5'
       }).addTo(map);
     });
+    const destinationInfo = {
+
+zurich:{
+title:"🇨🇭 Zürich",
+image:"https://images.unsplash.com/photo-1533105079780-92b9be482077",
+content:`
+<h3>🏨 Hotels</h3>
+<ul>
+<li>Baur au Lac – 600-1200 CHF</li>
+<li>Dolder Grand – 500-1500 CHF</li>
+</ul>
+
+<h3>🍽 Restaurants</h3>
+<ul>
+<li>Kronenhalle – 50-120 CHF</li>
+<li>Widder Restaurant – 80-180 CHF</li>
+</ul>
+
+<h3>🎟 Aktivitäten</h3>
+<ul>
+<li>Zürichsee Bootsfahrt – 25 CHF</li>
+<li>Bahnhofstrasse Shopping – Kostenlos</li>
+</ul>
+`
+},
+
+stockholm:{
+title:"🇸🇪 Stockholm",
+image:"https://images.unsplash.com/photo-1509356843151-3e7d96241e11",
+content:`
+<h3>🏨 Hotels</h3>
+<ul>
+<li>Grand Hôtel – 350-700 CHF</li>
+<li>Haymarket Hotel – 120-250 CHF</li>
+</ul>
+
+<h3>🍽 Restaurants</h3>
+<ul>
+<li>Aifur – 30-60 CHF</li>
+<li>Tradition – 20-40 CHF</li>
+</ul>
+
+<h3>🎟 Aktivitäten</h3>
+<ul>
+<li>Vasa Museum – 18 CHF</li>
+<li>Bootstour – 35 CHF</li>
+</ul>
+`
+},
+
+lasvegas:{
+title:"🇺🇸 Las Vegas",
+image:"https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d",
+content:`
+<h3>🏨 Hotels</h3>
+<ul>
+<li>Bellagio – 250-800 CHF</li>
+<li>Caesars Palace – 200-700 CHF</li>
+</ul>
+
+<h3>🍽 Restaurants</h3>
+<ul>
+<li>Gordon Ramsay Burger – 25-50 CHF</li>
+<li>Bacchanal Buffet – 80-120 CHF</li>
+</ul>
+
+<h3>🎟 Aktivitäten</h3>
+<ul>
+<li>Sphere Las Vegas – 90 CHF</li>
+<li>Grand Canyon Helikopter – 300 CHF</li>
+</ul>
+`
+},
+
+mexicocity:{
+title:"🇲🇽 Mexico City",
+image:"https://images.unsplash.com/photo-1518105779142-d975f22f1b0a",
+content:`
+<h3>🏨 Hotels</h3>
+<ul>
+<li>Gran Hotel – 150-350 CHF</li>
+<li>Barceló Reforma – 100-250 CHF</li>
+</ul>
+
+<h3>🍽 Restaurants</h3>
+<ul>
+<li>El Cardenal – 10-25 CHF</li>
+<li>Azul Histórico – 20-50 CHF</li>
+</ul>
+
+<h3>🎟 Aktivitäten</h3>
+<ul>
+<li>Teotihuacán – 5 CHF</li>
+<li>Chapultepec Park – Kostenlos</li>
+</ul>
+`
+}
+
+};
+
+const modal = document.createElement("div");
+
+modal.innerHTML = `
+<div id="cityModal" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.9);
+z-index:9999;
+overflow:auto;
+padding:40px;
+">
+<div style="
+max-width:900px;
+margin:auto;
+background:#111;
+border:2px solid #dab15d;
+border-radius:20px;
+padding:40px;
+color:white;
+position:relative;
+">
+
+<button onclick="document.getElementById('cityModal').style.display='none'"
+style="
+position:absolute;
+right:20px;
+top:20px;
+background:#dab15d;
+border:none;
+padding:10px 15px;
+cursor:pointer;
+font-weight:bold;
+">
+✕
+</button>
+
+<div id="cityContent"></div>
+
+</div>
+</div>
+`;
+
+document.body.appendChild(modal);
+
+document.querySelectorAll(".luxury-card").forEach(card=>{
+
+card.addEventListener("click",()=>{
+
+const city=card.dataset.destination;
+
+if(!destinationInfo[city]) return;
+
+document.getElementById("cityContent").innerHTML=`
+
+<h2 style="font-size:3rem;color:#dab15d;margin-bottom:20px;">
+${destinationInfo[city].title}
+</h2>
+
+<img src="${destinationInfo[city].image}"
+style="
+width:100%;
+height:350px;
+object-fit:cover;
+border-radius:15px;
+margin-bottom:25px;
+">
+
+${destinationInfo[city].content}
+
+`;
+
+document.getElementById("cityModal").style.display="block";
+
+});
+
+});
   </script>
 
 </body>
